@@ -1,0 +1,19 @@
+{
+  "name": "sort_visualizer",
+  "version": "1.0.0",
+  "description": "Viuzualing sorting and search algorithms",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjjply42/Sorting-Visualizer.git"
+  },
+  "author": "mjjply42",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjjply42/Sorting-Visualizer/issues"
+  },
+  "homepage": "https://github.com/mjjply42/Sorting-Visualizer#readme"
+}
