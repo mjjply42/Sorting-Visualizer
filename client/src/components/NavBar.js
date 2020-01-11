@@ -214,7 +214,16 @@ export function NavBar() {
             <Typography className={classes.title} variant="h5" noWrap>
             Sorting Visualizer
             </Typography>
-            <FormControl className={classes.margin} style={{marginBottom: 23, marginRight: 30, width: 150}}>
+            <div style={{marginRight: 80}}>
+                <Fab style={{margin: 10}} size="small" aria-label="add" className={sliders.refreshIcon}>
+                    <RefreshIcon/>
+                </Fab>
+                <Fab style={{margin: 10}} onClick={()=> {dispatch({type: 'update-stoppage', data: !stopped})}} 
+                size="small" aria-label="add" className={stopped? sliders.successIcon:sliders.errorIcon}>
+                    {stopped ? <DoneIcon/> : <CloseIcon/>}
+                </Fab>
+            </div>
+            <FormControl className={classes.margin} style={{marginBottom: 23, marginLeft: -60, marginRight: 15, width: 150, minWidth: 100}}>
                 <InputLabel id="demo-customized-select-label"></InputLabel>
                 <Select
                     labelId="demo-customized-select-label"
@@ -230,21 +239,12 @@ export function NavBar() {
                 })}
                 </Select>
             </FormControl>
-            <div style={{marginRight: 150}}>
-                <Fab style={{margin: 10}} size="small" aria-label="add" className={sliders.refreshIcon}>
-                    <RefreshIcon/>
-                </Fab>
-                <Fab style={{margin: 10}} onClick={()=> {dispatch({type: 'update-stoppage', data: !stopped})}} 
-                size="small" aria-label="add" className={stopped? sliders.successIcon:sliders.errorIcon}>
-                    {stopped ? <DoneIcon/> : <CloseIcon/>}
-                </Fab>
-            </div>
-            <div style={{width: 250, marginTop: 20}}>
+            <div style={{width: 250, marginTop: 20, marginRight: 25}}>
             <Typography gutterBottom>Sorting Size</Typography>
             <SortingSizeSlider min={5} max={100} onChange={ (e, val) => dispatch({type:'update-count', data: val}) }   
             valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={count} />
             </div>
-            <div style={{width: 250, marginTop: 20}}>
+            <div style={{width: 250, marginTop: 20, marginRight: 15}}>
             <Typography gutterBottom>Delay (ms)</Typography>
             <DelaySlider min={500} max={2000} step={100} onChange={ (e, val) => dispatch({type:'update-delay', data: val}) }   
             valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={count} style={{width: 100}} />
