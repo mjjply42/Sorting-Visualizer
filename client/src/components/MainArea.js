@@ -2,31 +2,67 @@ import React,{ useState, useEffect } from 'react';
 
 export const MainArea = () => {
 
-    const [height, setHeight] = useState("20em")
+    const [barCount, setBarCount] = useState(10)
+    const [mapTest, setMapTest] = useState([])
+    const [switchIndexes, updateIndexes] = useState([1, 5])
 
-    /*function handler_2200 () {
-        setHeight("190em")
-      }
-    function handler_2000 () {
-        setHeight("140em")
-      }
-    function handler_1800 () {
-      setHeight("100em")
+    useEffect(() => {
+        //updateMapBars()
+    }, [barCount])
+
+    useEffect(() => {
+    }, [mapTest])
+
+    const swap = async (value_array) => {
+        let mapTmp = JSON.parse(JSON.stringify(mapTest))
+        let tmp = {number: 0, height: 0}
+        let test = mapTmp.map((item, index) => {
+            tmp = JSON.parse(JSON.stringify(mapTmp[value_array[0]]))
+            if (index === value_array[0])
+                item = mapTmp[value_array[1]]
+            else if (index === value_array[1])
+                item = tmp
+            return item
+        })
+        setMapTest(test)
     }
-    function handler_1000 () {
-        setHeight("80em")
-      }
-      function handler_900 () {
-        setHeight("40em")
-      }
-    window.matchMedia("(max-height: 900px)").addListener(handler_900)
-    window.matchMedia("(max-height: 1000px)").addListener(handler_1000)
-    window.matchMedia("(max-height: 1800px)").addListener(handler_1800)
-    window.matchMedia("(max-height: 2000px)").addListener(handler_2000)
-    window.matchMedia("(max-height: 2200px)").addListener(handler_2200)*/
+
+    const updateMapBars = async (num) => {
+        let i = 0
+        let value_array = []
+        let mapTmp = []
+        while (i < num)
+        {
+            value_array.push(i)
+            i++
+        }
+        while (value_array.length)
+        {
+            let new_bar = {number: 0, height: 0}
+            let result = Math.floor((Math.random() * value_array.length - 1) + 1)
+            result = value_array.splice(result, 1)
+            new_bar.number = result[0]
+            new_bar.height = 400/(num - result[0])
+            mapTmp.push(new_bar)
+        }
+        setMapTest(mapTmp)
+    }
+    useEffect(() => {
+        //setTimeout(() => { updateIndexes([2, 12, 5])}, 2000)
+        updateMapBars(10)
+    },[])
     return (
-        <div style={{marginLeft: 90, marginTop: 80, backgroundColor: "yellow", height: 600, width: "92%"}}>
-            <h>Hello</h>
+        <div style={{marginLeft: 40, marginTop: 20, backgroundColor: "white", height: 600, width: "94%"}}>
+            <div style={{display: "flex", alignContent: "center", flexGrow: 1, flexShrink: 1 ,flexBasis: "auto", justifyContent: "center"}}>
+            {mapTest.map((item, index) => {
+                return (
+                    <div style={{margin: 2, backgroundColor: (switchIndexes.includes(index) ?"green" : "red"), 
+                    maxHeight: 400,height: item.height, maxWidth: 100, width: ((window.innerWidth - 150) / mapTest.length)}}>
+                    </div>
+                )
+            })}
+            <button onClick={async ()=> {await swap(switchIndexes)}}>Click</button>
+            </div>
         </div>
     )
 } 
