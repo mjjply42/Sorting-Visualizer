@@ -1,14 +1,16 @@
 import React,{ useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
 
 export const MainArea = () => {
 
     const [barCount, setBarCount] = useState(10)
     const [mapTest, setMapTest] = useState([])
     const [switchIndexes, updateIndexes] = useState([1, 5])
+    const count = useSelector(state => state.navState.amount)
 
     useEffect(() => {
-        //updateMapBars()
-    }, [barCount])
+        updateMapBars(count)
+    }, [count])
 
     useEffect(() => {
     }, [mapTest])
@@ -49,7 +51,7 @@ export const MainArea = () => {
     }
     useEffect(() => {
         //setTimeout(() => { updateIndexes([2, 12, 5])}, 2000)
-        updateMapBars(10)
+        updateMapBars(count)
     },[])
     return (
         <div style={{marginLeft: 40, marginTop: 20, backgroundColor: "white", height: 600, width: "94%"}}>
