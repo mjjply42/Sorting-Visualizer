@@ -1,5 +1,6 @@
 import React from 'react';
-import {NavBar} from './components/NavBar.js'
+import { NavBar } from './components/NavBar.js'
+import { MainArea } from './components/MainArea.js'
 import './App.css';
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
       <header className="App-header">
       </header>
       <NavBar/>
+      <MainArea/>
     </div>
   );
 }
