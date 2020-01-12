@@ -47,7 +47,9 @@ export const MainArea = () => {
         }
     },[stopped])
 
-    const swap = async (value_array) => {
+    const swap = async (value_array, status) => {
+        if (status === "test")
+            return
         let mapTmp = JSON.parse(JSON.stringify(mapTest))
         let tmp = {number: 0, height: 0}
         let test = mapTmp.map((item, index) => {
@@ -99,7 +101,8 @@ export const MainArea = () => {
         await swap(info[1].pair)
         await swap(info[2].pair)
         await swap(info[3].pair)*/
-        swap(infor[0].pair)
+        swap(infor[0].pair, "test")
+
 
     }
 
@@ -116,7 +119,7 @@ export const MainArea = () => {
             <div style={{display: "flex", alignContent: "center", flexGrow: 1, flexShrink: 1 ,flexBasis: "auto", justifyContent: "center"}}>
             {mapTest.map((item, index) => {
                 return (
-                    <div key={index} style={{margin: 2, backgroundColor: (switchIndexes.includes(index) ?"green" : "red"), 
+                    <div key={index} style={{margin: 2, backgroundColor: (info ? (info.includes(index) ?"green" : "red"):"red"), 
                     maxHeight: 400,height: item.height, maxWidth: 100, width: ((window.innerWidth - 150) / mapTest.length)}}>
                     </div>
                 )
