@@ -1,6 +1,6 @@
 const defaultState = {
     amount: 5,
-    delay: 2000,
+    delay: 50,
     stopped: true,
     sortTypes: ["QuickSort", "Bubble Sort", "Radix Sort", 
                 "Merge Sort", "Selection Sort", "Insertion Sort", 

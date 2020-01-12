@@ -7,7 +7,6 @@ export const MainArea = () => {
     const dispatch = useDispatch()
     const [barCount, setBarCount] = useState(10)
     const [mapTest, setMapTest] = useState([])
-    const [switchIndexes, updateIndexes] = useState([1, 5])
     const [array_to_sort, updateSort] = useState([])
     const count = useSelector(state => state.navState.amount)
     const stopped = useSelector(state => state.navState.stopped)
@@ -17,6 +16,8 @@ export const MainArea = () => {
 
     async function test()
     {
+        console.log("TLOOOL")
+        await delaySet(delay)
         swap(info[0].pair)
         let test = JSON.parse(JSON.stringify(info))
         test.splice(0,1)
@@ -43,7 +44,7 @@ export const MainArea = () => {
         }
         else
             return
-    }, [mapTest, info])
+    }, [info])
 
     useEffect(() => {
         if (stopped === false)
