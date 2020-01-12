@@ -1,9 +1,10 @@
 import React,{ useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { quick_sort }  from '../sorts/quicksort.js'
+import { quick_sort, is_sorted }  from '../sorts/quicksort.js'
 
 export const MainArea = () => {
 
+    const dispatch = useDispatch()
     const [barCount, setBarCount] = useState(10)
     const [mapTest, setMapTest] = useState([])
     const [switchIndexes, updateIndexes] = useState([1, 5])
@@ -11,7 +12,16 @@ export const MainArea = () => {
     const count = useSelector(state => state.navState.amount)
     const stopped = useSelector(state => state.navState.stopped)
     const delay = useSelector(state => state.navState.delay)
+    const refresh = useSelector(state => state.navState.refresh)
     const [info, updateInfo] = useState([])
+
+    async function test()
+    {
+        swap(info[0].pair)
+        let test = JSON.parse(JSON.stringify(info))
+        test.splice(0,1)
+        updateInfo(test)
+    }
 
     async function delaySet(time) {
         return new Promise(function(resolve) {
@@ -25,30 +35,33 @@ export const MainArea = () => {
 
     useEffect(() => {
         if (!stopped && info.length > 0)
+            test()
+        else if (!stopped && info.length < 1)
         {
-        console.log(info[0].new_array)
-        swap(info[0].pair)
-        let test = JSON.parse(JSON.stringify(info))
-        test.splice(0,1)
-        updateInfo(test)
+            dispatch({type: 'update-stoppage'})
+            dispatch({type: 'update-sorting-status', data: false})
         }
         else
             return
     }, [mapTest, info])
 
     useEffect(() => {
-        console.log("STOPPED: ", stopped)
         if (stopped === false)
-            do_sort()
-        else
         {
-            console.log("HEYNOW")
-            updateInfo()
+            if (!is_sorted(array_to_sort))
+                do_sort()
+            else
+                dispatch({type: 'update-stoppage'})
         }
     },[stopped])
 
+    useEffect(() => {
+        if (refresh)
+            updateMapBars(count, "refresh")
+    },[refresh])
+
     const swap = async (value_array, status) => {
-        if (status === "test")
+        if (status === "pusher")
             return
         let mapTmp = JSON.parse(JSON.stringify(mapTest))
         let tmp = {number: 0, height: 0}
@@ -63,7 +76,7 @@ export const MainArea = () => {
         await setMapTest(test)
     }
 
-    const updateMapBars = async (num) => {
+    const updateMapBars = async (num, status) => {
         let i = 0
         let value_array = []
         let mapTmp = []
@@ -85,25 +98,16 @@ export const MainArea = () => {
         updateSort(mapTmp.map((item, index) => {
             return item.number
         }))
+        if (status === "refresh")
+            dispatch({type: 'update-refresh-status', data: false})
     }
     const do_sort = async () => 
     {
-        let infor = quick_sort(array_to_sort, 0, array_to_sort.length - 1)
+        let infor = []
+        quick_sort(array_to_sort, 0, array_to_sort.length - 1, infor)
+        console.log(array_to_sort, infor)
         updateInfo(infor)
-        /*info.forEach(async (item, index) => {
-            await delaySet(delay).then(() => {
-                swap(info[index].pair)
-                console.log(info[index].new_array, info[index].pair)
-                
-            })
-        })
-        await swap(info[0].pair)
-        await swap(info[1].pair)
-        await swap(info[2].pair)
-        await swap(info[3].pair)*/
-        swap(infor[0].pair, "test")
-
-
+        swap(infor[0].pair, "pusher")
     }
 
     useEffect(() => {
@@ -119,7 +123,7 @@ export const MainArea = () => {
             <div style={{display: "flex", alignContent: "center", flexGrow: 1, flexShrink: 1 ,flexBasis: "auto", justifyContent: "center"}}>
             {mapTest.map((item, index) => {
                 return (
-                    <div key={index} style={{margin: 2, backgroundColor: (info ? (info.includes(index) ?"green" : "red"):"red"), 
+                    <div key={index} style={{margin: 2, backgroundColor: (info ?(info.length > 0 && info[0].pair.includes(index) ? "green" : "red"):"red"), 
                     maxHeight: 400,height: item.height, maxWidth: 100, width: ((window.innerWidth - 150) / mapTest.length)}}>
                     </div>
                 )

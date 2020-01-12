@@ -166,6 +166,8 @@ export function NavBar() {
     const delay = useSelector(state => state.navState.delay)
     const stopped = useSelector(state => state.navState.stopped)
     const sorts = useSelector(state => state.navState.sortTypes)
+    const refresh = useSelector(state => state.navState.refresh)
+    const sorting = useSelector(state => state.navState.sorting)
     const [sortType, setSortType] = useState("QuickSort")
 
     const BootstrapInput = withStyles(theme => ({
@@ -207,6 +209,17 @@ export function NavBar() {
         setSortType(event.target.value);
     };
 
+    const refreshStatuses = async () => {
+        await dispatch({type: 'update-refresh-status', data: !refresh})
+        if (!stopped)
+            await dispatch({type: 'update-stoppage'})
+    }
+
+    const sortCountChange = async (val) => {
+        dispatch({type:'update-count', data: val})
+        if (!stopped)
+            await dispatch({type: 'update-stoppage'})
+    }
 
     return (
     <div className={classes.root}>
@@ -216,10 +229,15 @@ export function NavBar() {
             Sorting Visualizer
             </Typography>
             <div style={{marginRight: 80}}>
-                <Fab style={{margin: 10}} size="small" aria-label="add" className={sliders.refreshIcon}>
+                <Fab style={{margin: 10}} onClick={async()=> {refreshStatuses()}} size="small" aria-label="add" className={sliders.refreshIcon}>
                     <RefreshIcon/>
                 </Fab>
-                <Fab style={{margin: 10}} onClick={()=> {dispatch({type: 'update-stoppage'}, console.log("HERDO"))}} 
+                <Fab style={{margin: 10}} onClick={async()=> {
+                    if (stopped)
+                        dispatch({type: 'update-stoppage'})
+                    else
+                        alert("sorting")
+                }}
                 size="small" aria-label="add" className={stopped? sliders.successIcon:sliders.errorIcon}>
                     {stopped ? <DoneIcon/> : <CloseIcon/>}
                 </Fab>
@@ -242,7 +260,7 @@ export function NavBar() {
             </FormControl>
             <div style={{width: 250, marginTop: 20, marginRight: 25}}>
             <Typography gutterBottom>Sorting Size</Typography>
-            <SortingSizeSlider min={5} max={100} onChange={ (e, val) => dispatch({type:'update-count', data: val}) }   
+            <SortingSizeSlider min={5} max={100} onChange={ (e, val) => sortCountChange(val) }   
             valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={count} />
             </div>
             <div style={{width: 250, marginTop: 20, marginRight: 15}}>

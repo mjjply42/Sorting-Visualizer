@@ -4,7 +4,9 @@ const defaultState = {
     stopped: true,
     sortTypes: ["QuickSort", "Bubble Sort", "Radix Sort", 
                 "Merge Sort", "Selection Sort", "Insertion Sort", 
-                "Heap Sort", "Counting Sort"]
+                "Heap Sort", "Counting Sort"],
+    refresh: true,
+    sorting: false
 }
 
 const navState = (state = defaultState, action) => {
@@ -23,6 +25,16 @@ const navState = (state = defaultState, action) => {
             return {
                 ...state,
                 stopped: !state.stopped
+            }
+        case 'update-refresh-status':
+            return {
+                ...state,
+                refresh: action.data
+            }
+        case 'update-sorting-status':
+            return {
+                ...state,
+                sorting: action.data
             }
         default:
             return state

@@ -1,4 +1,4 @@
-let swap_info = []
+//let swap_info = []
 
 function swap(array, val1, val2)
 {
@@ -7,7 +7,7 @@ function swap(array, val1, val2)
     array[val2] = temp
 }
 
-function partition(arr, pivot, left, right)
+function partition(arr, pivot, left, right, swap_info)
 {
     var pivotValue = arr[pivot],
         partitionIndex = left
@@ -25,7 +25,7 @@ function partition(arr, pivot, left, right)
     return partitionIndex
 }
 
-function is_sorted(arr)
+export function is_sorted(arr)
 {
     let i = 0
     while (i < arr.length)
@@ -39,7 +39,7 @@ function is_sorted(arr)
     return true
 }
 
-export function quick_sort(arr, left, right)
+export function quick_sort(arr, left, right, swap_info)
 {
     var len = arr.length, 
     pivot,
@@ -47,10 +47,12 @@ export function quick_sort(arr, left, right)
 
     if(left < right && !is_sorted(arr)){
     pivot = right
-    partitionIndex = partition(arr, pivot, left, right)
+    partitionIndex = partition(arr, pivot, left, right, swap_info)
 
-    quick_sort(arr, left, partitionIndex - 1)
-    quick_sort(arr, partitionIndex + 1, right)
+    quick_sort(arr, left, partitionIndex - 1, swap_info)
+    quick_sort(arr, partitionIndex + 1, right, swap_info)
     }
-    return swap_info;
+    //let swap_tmp = JSON.parse(JSON.stringify(swap_info))
+    //swap_info = []
+    //return swap_tmp;
 }
