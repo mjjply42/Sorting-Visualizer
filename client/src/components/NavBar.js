@@ -168,7 +168,7 @@ export function NavBar() {
     const sorts = useSelector(state => state.navState.sortTypes)
     const refresh = useSelector(state => state.navState.refresh)
     const sorting = useSelector(state => state.navState.sorting)
-    const [sortType, setSortType] = useState("QuickSort")
+    const [sortType, setSortType] = useState("Quick Sort")
 
     const BootstrapInput = withStyles(theme => ({
         root: {
