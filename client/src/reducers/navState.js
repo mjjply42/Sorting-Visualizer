@@ -1,8 +1,10 @@
 const defaultState = {
-    amount: 10,
-    delay: 0,
+    amount: 5,
+    delay: 2000,
     stopped: true,
-    sortTypes: ["QuickSort", "Bubble Sort", "Radix Sort"]
+    sortTypes: ["QuickSort", "Bubble Sort", "Radix Sort", 
+                "Merge Sort", "Selection Sort", "Insertion Sort", 
+                "Heap Sort", "Counting Sort"]
 }
 
 const navState = (state = defaultState, action) => {
@@ -20,7 +22,7 @@ const navState = (state = defaultState, action) => {
         case 'update-stoppage':
             return {
                 ...state,
-                stopped: action.data
+                stopped: !state.stopped
             }
         default:
             return state

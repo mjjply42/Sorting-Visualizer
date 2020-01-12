@@ -163,6 +163,7 @@ export function NavBar() {
     const sliders = makeStyles(iconStyles)();
     const dispatch = useDispatch()
     const count = useSelector(state => state.navState.amount)
+    const delay = useSelector(state => state.navState.delay)
     const stopped = useSelector(state => state.navState.stopped)
     const sorts = useSelector(state => state.navState.sortTypes)
     const [sortType, setSortType] = useState("QuickSort")
@@ -218,7 +219,7 @@ export function NavBar() {
                 <Fab style={{margin: 10}} size="small" aria-label="add" className={sliders.refreshIcon}>
                     <RefreshIcon/>
                 </Fab>
-                <Fab style={{margin: 10}} onClick={()=> {dispatch({type: 'update-stoppage', data: !stopped})}} 
+                <Fab style={{margin: 10}} onClick={()=> {dispatch({type: 'update-stoppage'}, console.log("HERDO"))}} 
                 size="small" aria-label="add" className={stopped? sliders.successIcon:sliders.errorIcon}>
                     {stopped ? <DoneIcon/> : <CloseIcon/>}
                 </Fab>
@@ -246,8 +247,8 @@ export function NavBar() {
             </div>
             <div style={{width: 250, marginTop: 20, marginRight: 15}}>
             <Typography gutterBottom>Delay (ms)</Typography>
-            <DelaySlider min={500} max={2000} step={100} onChange={ (e, val) => dispatch({type:'update-delay', data: val}) }   
-            valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={count} style={{width: 100}} />
+            <DelaySlider min={0} max={2000} step={200} onChange={ (e, val) => dispatch({type:'update-delay', data: val}) }   
+            valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={delay} style={{width: 100}} />
             </div>
         </Toolbar>
         </AppBar>
