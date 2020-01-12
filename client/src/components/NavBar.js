@@ -265,7 +265,7 @@ export function NavBar() {
             </div>
             <div style={{width: 250, marginTop: 20, marginRight: 15}}>
             <Typography gutterBottom>Delay (ms)</Typography>
-            <DelaySlider min={0} max={2000} step={50} onChange={ (e, val) => dispatch({type:'update-delay', data: val}) }   
+            <DelaySlider min={0} max={2000} step={1} onChange={ (e, val) => dispatch({type:'update-delay', data: val}) }   
             valueLabelDisplay="auto" aria-label="pretto slider" defaultValue={delay} style={{width: 100}} />
             </div>
         </Toolbar>
