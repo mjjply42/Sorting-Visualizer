@@ -2,7 +2,7 @@ const defaultState = {
     amount: 5,
     delay: 45,
     stopped: true,
-    sortTypes: ["QuickSort",],
+    sortTypes: ["Quick Sort",],
     refresh: true,
     sorting: false
 }
