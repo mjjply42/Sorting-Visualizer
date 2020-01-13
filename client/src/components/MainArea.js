@@ -20,7 +20,7 @@ export const MainArea = () => {
         let mapTmp = JSON.parse(JSON.stringify(mapTest))
         let newMap = []
             newMap = mapTmp.map((item, index) => {
-                if (item.color === "yellow")
+                if (item.color !== "red")
                     item.color = "red"
                 if (index === info[0].searched[0][0])
                     item.color = "yellow"
@@ -34,10 +34,19 @@ export const MainArea = () => {
         updateInfo(newInfo)
     }
 
+    function isEqualPair(arr1, arr2)
+    {
+        if (!arr2 || !arr1)
+            return false
+        if (arr1[0] !== arr2[0] || arr1[1] !== arr2[1])
+            return false
+        return true
+    }
+
     async function swap_pusher()
     {
         await delaySet(delay)
-        if (info[0].searched.length > 0)
+        if (info[0].searched.length > 0 && !isEqualPair(info[0].searched[0], info[0].pair))
         {
             await setSearchIndex(info)
             return
@@ -68,7 +77,7 @@ export const MainArea = () => {
             dispatch({type: 'update-sorting-status', data: false})
             let mapTmp = JSON.parse(JSON.stringify(mapTest))
             let newMap = mapTmp.map((item, index) => {
-                if (item.color === "green")
+                if (item.color !== "red")
                     item.color = "red"
                 return item
             })
@@ -100,7 +109,7 @@ export const MainArea = () => {
         let tmp = {number: 0, height: 0, color: "red"}
         let newMap = mapTmp.map((item, index) => {
             tmp = JSON.parse(JSON.stringify(mapTmp[value_array[0]]))
-            if (item.color === "green")
+            if (item.color !== "red")
                 item.color = "red"
             if (index === value_array[0])
             {

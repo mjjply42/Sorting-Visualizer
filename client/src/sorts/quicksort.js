@@ -18,7 +18,9 @@ function partition(arr, pivot, left, right, swap_info)
         {
             swap(arr, i, partitionIndex)
             swap_info.push({new_array: arr, searched: search_values, pair: [i, partitionIndex]})
+            search_values.push([i, partitionIndex])
             partitionIndex++
+            continue
         }
         search_values.push([i, partitionIndex])
     }
