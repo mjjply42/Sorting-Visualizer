@@ -9,7 +9,7 @@ export const MainArea = () => {
         sorted: "blue",
         searching: "yellow",
         swapped: "yellow",
-        pivot: "black"
+        pivot: "green"
     }
 
     const dispatch = useDispatch()
@@ -69,7 +69,6 @@ export const MainArea = () => {
             await setSearchIndex(info)
             return
         }
-        
         swap(info[0].pair)
         let newInfo = JSON.parse(JSON.stringify(info))
         newInfo.splice(0,1)
