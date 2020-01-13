@@ -4,6 +4,13 @@ import { quick_sort, is_sorted }  from '../sorts/quicksort.js'
 
 export const MainArea = () => {
 
+    const sortColors = {
+        unsorted: "red",
+        sorted: "blue",
+        searching: "yellow",
+        swapped: "green"
+    }
+
     const dispatch = useDispatch()
     const [barCount, setBarCount] = useState(10)
     const [mapTest, setMapTest] = useState([])
@@ -20,16 +27,22 @@ export const MainArea = () => {
         let mapTmp = JSON.parse(JSON.stringify(mapTest))
         let newMap = []
             newMap = mapTmp.map((item, index) => {
-                if (item.color !== "red")
-                    item.color = "red"
+                if (item.color !== sortColors.unsorted && item.color !== sortColors.sorted)
+                    item.color = sortColors.unsorted
                 if (index === info[0].searched[0][0])
-                    item.color = "yellow"
+                    item.color = sortColors.searching
                 else if (index === info[0].searched[0][1])
-                    item.color = "yellow"
+                    item.color = sortColors.searching
                 return item
         })
         let newInfo = JSON.parse(JSON.stringify(info))
         newInfo[0].searched.splice(0,1)
+        newMap = newMap.map((item, index) => {
+            let result = isInSortedPosition(item.number, index)
+            if (result)
+                item.color = sortColors.sorted
+            return item
+        })
         setMapTest(newMap)
         updateInfo(newInfo)
     }
@@ -65,26 +78,37 @@ export const MainArea = () => {
         });
     }
 
+    const isInSortedPosition = (item, index) => {
+        if (array_to_sort[index] === item)
+            return true
+        return false
+    }
 
     const swap = async (value_array, status) => {
         if (status === "pusher")
             return
         let mapTmp = JSON.parse(JSON.stringify(mapTest))
-        let tmp = {number: 0, height: 0, color: "red"}
+        let tmp = {number: 0, height: 0, color: sortColors.unsorted}
         let newMap = mapTmp.map((item, index) => {
             tmp = JSON.parse(JSON.stringify(mapTmp[value_array[0]]))
-            if (item.color !== "red")
-                item.color = "red"
+            if (item.color !== sortColors.unsorted && item.color !== sortColors.sorted)
+                item.color = sortColors.unsorted
             if (index === value_array[0])
             {
                 item = mapTmp[value_array[1]]
-                item.color = "green"
+                item.color = sortColors.swapped
             }
             else if (index === value_array[1])
             {
                 item = tmp
-                item.color = "green"
+                item.color = sortColors.swapped
             }
+            return item
+        })
+        newMap = newMap.map((item, index) => {
+            let result = isInSortedPosition(item.number, index)
+            if (result)
+                item.color = sortColors.sorted
             return item
         })
         await setMapTest(newMap)
@@ -101,11 +125,11 @@ export const MainArea = () => {
         }
         while (value_array.length)
         {
-            let new_bar = {number: 0, height: 0, color: "red"}
+            let new_bar = {number: 0, height: 0, color: sortColors.unsorted}
             let result = Math.floor((Math.random() * 500) + 1)
             let result2 = Math.floor((Math.random() * value_array.length - 1) + 1)
             value_array.splice(result2, 1)
-            console.log("RESULT ", result)
+            //console.log("RESULT ", result)
             new_bar.number = result
             new_bar.height = (result)
             mapTmp.push(new_bar)
@@ -121,6 +145,7 @@ export const MainArea = () => {
     {
         let infor = []
         quick_sort(array_to_sort, 0, array_to_sort.length - 1, infor)
+        updateSort(array_to_sort)
         updateInfo(infor)
         swap(infor[0].pair, "pusher")
     }
@@ -143,8 +168,8 @@ export const MainArea = () => {
             dispatch({type: 'update-sorting-status', data: false})
             let mapTmp = JSON.parse(JSON.stringify(mapTest))
             let newMap = mapTmp.map((item, index) => {
-                if (item.color !== "red")
-                    item.color = "red"
+                if (item.color !== sortColors.unsorted)
+                    item.color = sortColors.unsorted
                 return item
             })
             setMapTest(newMap)
