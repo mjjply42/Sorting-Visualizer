@@ -168,6 +168,7 @@ export function NavBar() {
     const sorts = useSelector(state => state.navState.sortTypes)
     const refresh = useSelector(state => state.navState.refresh)
     const sorting = useSelector(state => state.navState.sorting)
+    const setSort = useSelector(state => state.navState.setSort)
     const [sortType, setSortType] = useState("Quick Sort")
 
     const BootstrapInput = withStyles(theme => ({
@@ -207,6 +208,7 @@ export function NavBar() {
 
     const handleChange = event => {
         setSortType(event.target.value);
+        dispatch({type: "update-sortType-status", data: event.target.value})
     };
 
     const refreshStatuses = async () => {
@@ -220,6 +222,10 @@ export function NavBar() {
         if (!stopped)
             await dispatch({type: 'update-stoppage'})
     }
+
+    useEffect(() => {
+        setSortType(setSort)
+    },[])
 
     return (
     <div className={classes.root}>

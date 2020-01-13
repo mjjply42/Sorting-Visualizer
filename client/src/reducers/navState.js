@@ -2,7 +2,10 @@ const defaultState = {
     amount: 5,
     delay: 45,
     stopped: true,
-    sortTypes: ["Quick Sort",],
+    sortTypes: ["Quick Sort", "Bubble Sort", "Radix Sort", 
+                "Merge Sort", "Selection Sort", "Insertion Sort", 
+                "Heap Sort", "Counting Sort"],
+    setSort: "Quick Sort",
     refresh: true,
     sorting: false
 }
@@ -30,6 +33,11 @@ const navState = (state = defaultState, action) => {
                 refresh: action.data
             }
         case 'update-sorting-status':
+            return {
+                ...state,
+                sorting: action.data
+            }
+        case 'update-sortType-status':
             return {
                 ...state,
                 sorting: action.data
