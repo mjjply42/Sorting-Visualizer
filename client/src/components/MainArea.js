@@ -8,7 +8,8 @@ export const MainArea = () => {
         unsorted: "red",
         sorted: "blue",
         searching: "yellow",
-        swapped: "green"
+        swapped: "yellow",
+        pivot: "black"
     }
 
     const dispatch = useDispatch()
@@ -19,6 +20,9 @@ export const MainArea = () => {
     const stopped = useSelector(state => state.navState.stopped)
     const delay = useSelector(state => state.navState.delay)
     const refresh = useSelector(state => state.navState.refresh)
+    const [switchValues, updateSwitchValues] = useState({
+        SHOW_SEARCH: false
+    })
     const [info, updateInfo] = useState([])
 
 
@@ -27,7 +31,8 @@ export const MainArea = () => {
         let mapTmp = JSON.parse(JSON.stringify(mapTest))
         let newMap = []
             newMap = mapTmp.map((item, index) => {
-                if (item.color !== sortColors.unsorted && item.color !== sortColors.sorted)
+                if (item.color !== sortColors.unsorted && item.color !== sortColors.sorted 
+                    && item.color !== sortColors.pivot)
                     item.color = sortColors.unsorted
                 if (index === info[0].searched[0][0])
                     item.color = sortColors.searching
@@ -39,7 +44,7 @@ export const MainArea = () => {
         newInfo[0].searched.splice(0,1)
         newMap = newMap.map((item, index) => {
             let result = isInSortedPosition(item.number, index)
-            if (result)
+            if (result && item.number !== sortColors.pivot)
                 item.color = sortColors.sorted
             return item
         })
@@ -59,13 +64,13 @@ export const MainArea = () => {
     async function swap_pusher()
     {
         await delaySet(delay)
-        if (info[0].searched.length > 0 && !isEqualPair(info[0].searched[0], info[0].pair))
+        if (switchValues.SHOW_SEARCH && info[0].searched.length > 0 && !isEqualPair(info[0].searched[0], info[0].pair))
         {
             await setSearchIndex(info)
             return
         }
-        if (info[0].pair[0] !== info[0].pair[1])
-            swap(info[0].pair)
+        
+        swap(info[0].pair)
         let newInfo = JSON.parse(JSON.stringify(info))
         newInfo.splice(0,1)
         updateInfo(newInfo)
@@ -103,11 +108,13 @@ export const MainArea = () => {
                 item = tmp
                 item.color = sortColors.swapped
             }
+            else if (index === value_array[2])
+                item.color = sortColors.pivot
             return item
         })
         newMap = newMap.map((item, index) => {
             let result = isInSortedPosition(item.number, index)
-            if (result)
+            if (result && item.color !== sortColors.pivot)
                 item.color = sortColors.sorted
             return item
         })
@@ -143,6 +150,9 @@ export const MainArea = () => {
     }
     const do_sort = async () => 
     {
+        //infor = {new_array: array at time of push, searched: indexes currently being looked at, 
+            //      pair: [the margin splitting highs and lows for current working array partition, index of the partition,
+            //      pivot index]}
         let infor = []
         quick_sort(array_to_sort, 0, array_to_sort.length - 1, infor)
         updateSort(array_to_sort)

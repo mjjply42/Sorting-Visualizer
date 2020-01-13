@@ -1,4 +1,4 @@
-//let swap_info = []
+let globalPartition = 0
 
 function swap(array, val1, val2)
 {
@@ -17,7 +17,7 @@ function partition(arr, pivot, left, right, swap_info)
         if(arr[i] < pivotValue)
         {
             swap(arr, i, partitionIndex)
-            swap_info.push({new_array: arr, searched: search_values, pair: [i, partitionIndex]})
+            swap_info.push({new_array: arr, searched: search_values, pair: [i, partitionIndex, globalPartition]})
             search_values.push([i, partitionIndex])
             partitionIndex++
             continue
@@ -25,7 +25,7 @@ function partition(arr, pivot, left, right, swap_info)
         search_values.push([i, partitionIndex])
     }
     swap(arr, right, partitionIndex)
-    swap_info.push({new_array: arr, searched: search_values, pair: [right, partitionIndex]})
+    swap_info.push({new_array: arr, searched: search_values, pair: [right, partitionIndex, globalPartition]})
     return partitionIndex
 }
 
@@ -52,11 +52,10 @@ export function quick_sort(arr, left, right, swap_info)
     if(left < right && !is_sorted(arr)){
     pivot = right
     partitionIndex = partition(arr, pivot, left, right, swap_info)
-
+    globalPartition = partitionIndex
     quick_sort(arr, left, partitionIndex - 1, swap_info)
+    globalPartition = partitionIndex - 1
     quick_sort(arr, partitionIndex + 1, right, swap_info)
+    globalPartition = partitionIndex + 1
     }
-    //let swap_tmp = JSON.parse(JSON.stringify(swap_info))
-    //swap_info = []
-    //return swap_tmp;
 }
