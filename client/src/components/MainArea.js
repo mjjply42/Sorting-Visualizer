@@ -51,7 +51,8 @@ export const MainArea = () => {
             await setSearchIndex(info)
             return
         }
-        swap(info[0].pair)
+        if (info[0].pair[0] !== info[0].pair[1])
+            swap(info[0].pair)
         let newInfo = JSON.parse(JSON.stringify(info))
         newInfo.splice(0,1)
         updateInfo(newInfo)
@@ -63,6 +64,71 @@ export const MainArea = () => {
             setTimeout(resolve, time)
         });
     }
+
+
+    const swap = async (value_array, status) => {
+        if (status === "pusher")
+            return
+        let mapTmp = JSON.parse(JSON.stringify(mapTest))
+        let tmp = {number: 0, height: 0, color: "red"}
+        let newMap = mapTmp.map((item, index) => {
+            tmp = JSON.parse(JSON.stringify(mapTmp[value_array[0]]))
+            if (item.color !== "red")
+                item.color = "red"
+            if (index === value_array[0])
+            {
+                item = mapTmp[value_array[1]]
+                item.color = "green"
+            }
+            else if (index === value_array[1])
+            {
+                item = tmp
+                item.color = "green"
+            }
+            return item
+        })
+        await setMapTest(newMap)
+    }
+
+    const updateMapBars = async (num, status) => {
+        let i = 0
+        let value_array = []
+        let mapTmp = []
+        while (i < num)
+        {
+            value_array.push(i)
+            i++
+        }
+        while (value_array.length)
+        {
+            let new_bar = {number: 0, height: 0, color: "red"}
+            let result = Math.floor((Math.random() * 500) + 1)
+            let result2 = Math.floor((Math.random() * value_array.length - 1) + 1)
+            value_array.splice(result2, 1)
+            console.log("RESULT ", result)
+            new_bar.number = result
+            new_bar.height = (result)
+            mapTmp.push(new_bar)
+        }
+        setMapTest(mapTmp)
+        updateSort(mapTmp.map((item, index) => {
+            return item.number
+        }))
+        if (status === "refresh")
+            dispatch({type: 'update-refresh-status', data: false})
+    }
+    const do_sort = async () => 
+    {
+        let infor = []
+        quick_sort(array_to_sort, 0, array_to_sort.length - 1, infor)
+        updateInfo(infor)
+        swap(infor[0].pair, "pusher")
+    }
+
+    //useEffect Hooks
+    useEffect(() => {
+        updateMapBars(count)
+    },[])
 
     useEffect(() => {
         updateMapBars(count)
@@ -102,67 +168,6 @@ export const MainArea = () => {
             updateMapBars(count, "refresh")
     },[refresh])
 
-    const swap = async (value_array, status) => {
-        if (status === "pusher")
-            return
-        let mapTmp = JSON.parse(JSON.stringify(mapTest))
-        let tmp = {number: 0, height: 0, color: "red"}
-        let newMap = mapTmp.map((item, index) => {
-            tmp = JSON.parse(JSON.stringify(mapTmp[value_array[0]]))
-            if (item.color !== "red")
-                item.color = "red"
-            if (index === value_array[0])
-            {
-                item = mapTmp[value_array[1]]
-                item.color = "green"
-            }
-            else if (index === value_array[1])
-            {
-                item = tmp
-                item.color = "green"
-            }
-            return item
-        })
-        await setMapTest(newMap)
-    }
-
-    const updateMapBars = async (num, status) => {
-        let i = 0
-        let value_array = []
-        let mapTmp = []
-        while (i < num)
-        {
-            value_array.push(i)
-            i++
-        }
-        while (value_array.length)
-        {
-            let new_bar = {number: 0, height: 0, color: "red"}
-            let result = Math.floor((Math.random() * value_array.length - 1) + 1)
-            result = value_array.splice(result, 1)
-            new_bar.number = result[0]
-            new_bar.height = 400/(num - result[0])
-            mapTmp.push(new_bar)
-        }
-        setMapTest(mapTmp)
-        updateSort(mapTmp.map((item, index) => {
-            return item.number
-        }))
-        if (status === "refresh")
-            dispatch({type: 'update-refresh-status', data: false})
-    }
-    const do_sort = async () => 
-    {
-        let infor = []
-        quick_sort(array_to_sort, 0, array_to_sort.length - 1, infor)
-        updateInfo(infor)
-        swap(infor[0].pair, "pusher")
-    }
-
-    useEffect(() => {
-        updateMapBars(count)
-    },[])
-
     useEffect(() => {
     },[array_to_sort])
     
@@ -172,7 +177,7 @@ export const MainArea = () => {
             {mapTest.map((item, index) => {
                 return (
                     <div key={index} style={{margin: 2, backgroundColor: item.color, 
-                    maxHeight: 400,height: item.height, maxWidth: 100, width: ((window.innerWidth - 150) / mapTest.length)}}>
+                    maxHeight: 500,height: item.height, maxWidth: 100, width: ((window.innerWidth - 150) / mapTest.length)}}>
                     </div>
                 )
             })}
