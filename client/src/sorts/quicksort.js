@@ -9,6 +9,7 @@ function swap(array, val1, val2)
 
 function partition(arr, pivot, left, right, swap_info)
 {
+    let search_values = []
     var pivotValue = arr[pivot],
         partitionIndex = left
 
@@ -16,12 +17,13 @@ function partition(arr, pivot, left, right, swap_info)
         if(arr[i] < pivotValue)
         {
             swap(arr, i, partitionIndex)
-            swap_info.push({new_array: arr, pair: [i, partitionIndex]})
+            swap_info.push({new_array: arr, searched: search_values, pair: [i, partitionIndex]})
             partitionIndex++
         }
+        search_values.push([i, partitionIndex])
     }
     swap(arr, right, partitionIndex)
-    swap_info.push({new_array: arr, pair: [right, partitionIndex]})
+    swap_info.push({new_array: arr, searched: search_values, pair: [right, partitionIndex]})
     return partitionIndex
 }
 
