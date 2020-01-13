@@ -3,7 +3,6 @@ export function bubbleSort(arr, swapInfo)
     let i = arr.length
     let j = 0
     let temp = 0
-    let searchValues = []
 
     while (i > 0)
     {
@@ -15,9 +14,8 @@ export function bubbleSort(arr, swapInfo)
                 temp = arr[j]
                 arr[j] = arr[j + 1]
                 arr[j + 1] = temp
-                swapInfo.push({new_array: arr, searched: searchValues, pair: [j, j + 1]})
+                swapInfo.push({new_array: arr, pair: [j, j + 1]})
             }
-            searchValues.push([i,j])
             j++
         }
         i--
