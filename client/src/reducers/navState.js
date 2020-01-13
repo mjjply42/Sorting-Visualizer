@@ -40,7 +40,7 @@ const navState = (state = defaultState, action) => {
         case 'update-sortType-status':
             return {
                 ...state,
-                sorting: action.data
+                setSort: action.data
             }
         default:
             return state

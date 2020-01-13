@@ -29,7 +29,7 @@ function partition(arr, pivot, left, right, swap_info)
     return partitionIndex
 }
 
-export function is_sorted(arr)
+export function isSorted(arr)
 {
     let i = 0
     while (i < arr.length)
@@ -43,19 +43,19 @@ export function is_sorted(arr)
     return true
 }
 
-export function quick_sort(arr, left, right, swap_info)
+export function quickSort(arr, left, right, swap_info)
 {
     var len = arr.length, 
     pivot,
     partitionIndex
 
-    if(left < right && !is_sorted(arr)){
+    if(left < right && !isSorted(arr)){
     pivot = right
     partitionIndex = partition(arr, pivot, left, right, swap_info)
     globalPartition = partitionIndex
-    quick_sort(arr, left, partitionIndex - 1, swap_info)
+    quickSort(arr, left, partitionIndex - 1, swap_info)
     globalPartition = partitionIndex - 1
-    quick_sort(arr, partitionIndex + 1, right, swap_info)
+    quickSort(arr, partitionIndex + 1, right, swap_info)
     globalPartition = partitionIndex + 1
     }
 }

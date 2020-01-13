@@ -1,6 +1,7 @@
 import React,{ useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { quick_sort, is_sorted }  from '../sorts/quicksort.js'
+import { quickSort, isSorted }  from '../sorts/quicksort.js'
+import { bubbleSort } from '../sorts/bubblesort.js'
 
 export const MainArea = () => {
 
@@ -20,6 +21,7 @@ export const MainArea = () => {
     const stopped = useSelector(state => state.navState.stopped)
     const delay = useSelector(state => state.navState.delay)
     const refresh = useSelector(state => state.navState.refresh)
+    const setSort = useSelector(state => state.navState.setSort)
     const [switchValues, updateSwitchValues] = useState({
         SHOW_SEARCH: false
     })
@@ -64,7 +66,8 @@ export const MainArea = () => {
     async function swap_pusher()
     {
         await delaySet(delay)
-        if (switchValues.SHOW_SEARCH && info[0].searched.length > 0 && !isEqualPair(info[0].searched[0], info[0].pair))
+        if (switchValues.SHOW_SEARCH && info[0].searched.length > 0 
+            && !isEqualPair(info[0].searched[0], info[0].pair) && setSort === "Quick Sort")
         {
             await setSearchIndex(info)
             return
@@ -107,7 +110,7 @@ export const MainArea = () => {
                 item = tmp
                 item.color = sortColors.swapped
             }
-            else if (index === value_array[2])
+            else if (setSort === "Quick Sort" && index === value_array[2])
                 item.color = sortColors.pivot
             return item
         })
@@ -135,7 +138,6 @@ export const MainArea = () => {
             let result = Math.floor((Math.random() * 500) + 1)
             let result2 = Math.floor((Math.random() * value_array.length - 1) + 1)
             value_array.splice(result2, 1)
-            //console.log("RESULT ", result)
             new_bar.number = result
             new_bar.height = (result)
             mapTmp.push(new_bar)
@@ -153,7 +155,11 @@ export const MainArea = () => {
             //      pair: [the margin splitting highs and lows for current working array partition, index of the partition,
             //      pivot index]}
         let infor = []
-        quick_sort(array_to_sort, 0, array_to_sort.length - 1, infor)
+        if (setSort === "Quick Sort")
+            quickSort(array_to_sort, 0, array_to_sort.length - 1, infor)
+        else if (setSort === "Bubble Sort")
+            bubbleSort(array_to_sort, infor)
+        console.log(infor)
         updateSort(array_to_sort)
         updateInfo(infor)
         swap(infor[0].pair, "pusher")
@@ -190,7 +196,7 @@ export const MainArea = () => {
     useEffect(() => {
         if (stopped === false)
         {
-            if (!is_sorted(array_to_sort))
+            if (!isSorted(array_to_sort))
                 do_sort()
             else
                 dispatch({type: 'update-stoppage'})
@@ -203,7 +209,7 @@ export const MainArea = () => {
     },[refresh])
 
     useEffect(() => {
-    },[array_to_sort])
+    },[setSort])
     
     return (
         <div style={{marginLeft: 40, marginTop: 20, backgroundColor: "white", height: 600, width: "94%"}}>
