@@ -176,13 +176,13 @@ export const MainArea = () => {
             quickSort(array_to_sort, 0, array_to_sort.length - 1, infor)
         else if (setSort === "Bubble Sort")
             bubbleSort(array_to_sort, infor)
-        else if (setSort === "Merge Sort")
+        /*else if (setSort === "Merge Sort")
         {
             console.log("BEFORE: ", array_to_sort)
             mergeSort(array_to_sort, 0, array_to_sort.length - 1, infor)
             console.log("AFTER: ", array_to_sort)
             console.log(infor)
-        }
+        }*/
         updateSort(array_to_sort)
         let i = 0
         let j = 0
