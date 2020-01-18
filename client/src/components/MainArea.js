@@ -2,6 +2,7 @@ import React,{ useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { quickSort, isSorted }  from '../sorts/quicksort.js'
 import { bubbleSort } from '../sorts/bubblesort.js'
+import { mergeSort } from '../sorts/mergesort.js'
 
 export const MainArea = () => {
 
@@ -45,17 +46,13 @@ export const MainArea = () => {
                     item.color = sortColors.searching
                 return item
         })
-        //let newInfo = JSON.parse(JSON.stringify(infor))
-        //newInfo[0].searched.splice(0,1)
         newMap = newMap.map((item, index) => {
             let result = isInSortedPosition(item.number, index)
             if (result && item.number !== sortColors.pivot)
                 item.color = sortColors.sorted
             return item
         })
-        //console.log("AFTE SPL ", newInfo)
         setMapTest(newMap)
-        //updateInfo(newInfo)
         let newInfor2 = JSON.parse(JSON.stringify(currentArray))
         newInfor2[0].searched.splice(0,1)
         updateCurrArr(newInfor2)
@@ -79,31 +76,22 @@ export const MainArea = () => {
             await setSearchIndex(currentArray)
             return
         }
-        console.log("HEREL")
-        //let newInfo = JSON.parse(JSON.stringify(info))
         let newInfor2 = JSON.parse(JSON.stringify(currentArray))
-        console.log("JERBW")
-        //newInfo.splice(0,1)
         swap(newInfor2[0].pair)
         newInfor2.splice(0,1)
 
         if (newInfor2.length < 1)
         {
             updateGlobal(GLOBAL_CURR_INDEX + 1)
-            console.log("GLOBAL IND ", GLOBAL_CURR_INDEX + 1)
             let test = []
             if (info2[GLOBAL_CURR_INDEX + 1])
-            {
                 test = JSON.parse(JSON.stringify(info2[GLOBAL_CURR_INDEX + 1]))
-                console.log(test)
-            }
             else
                 test = []
             updateCurrArr(test)
         }
         else
             updateCurrArr(newInfor2)
-        //updateInfo(newInfo)
     }
 
     async function delaySet(time)
@@ -122,7 +110,6 @@ export const MainArea = () => {
     const swap = async (value_array, status) => {
         if (status === "pusher")
             return
-        console.log(value_array)
         let mapTmp = JSON.parse(JSON.stringify(mapTest))
         let tmp = {number: 0, height: 0, color: sortColors.unsorted}
         let newMap = mapTmp.map((item, index) => {
@@ -170,6 +157,7 @@ export const MainArea = () => {
             new_bar.number = result
             new_bar.height = (result)
             mapTmp.push(new_bar)
+            let test = `${new_bar}`
         }
         setMapTest(mapTmp)
         updateSort(mapTmp.map((item, index) => {
@@ -188,6 +176,13 @@ export const MainArea = () => {
             quickSort(array_to_sort, 0, array_to_sort.length - 1, infor)
         else if (setSort === "Bubble Sort")
             bubbleSort(array_to_sort, infor)
+        else if (setSort === "Merge Sort")
+        {
+            console.log("BEFORE: ", array_to_sort)
+            mergeSort(array_to_sort, 0, array_to_sort.length - 1, infor)
+            console.log("AFTER: ", array_to_sort)
+            console.log(infor)
+        }
         updateSort(array_to_sort)
         let i = 0
         let j = 0
@@ -213,7 +208,6 @@ export const MainArea = () => {
             i++
         }
         updateInfo(infor)
-        console.log("INFOR ", infor)
         updateInfo2(newInfor)
         updateCurrArr(newInfor[GLOBAL_CURR_INDEX])
         swap(infor[0].pair, "pusher")
@@ -229,13 +223,8 @@ export const MainArea = () => {
     }, [count])
 
     useEffect(() => {
-        console.log("DINERO")
-        console.log("CURR ", currentArray)
         if (!stopped && currentArray.length > 0)
-        {
-            console.log("TUrd3")
             swap_pusher()
-        }
         else if (!stopped && currentArray.length < 1)
         {
             dispatch({type: 'update-stoppage'})
@@ -250,14 +239,10 @@ export const MainArea = () => {
             setMapTest(newMap)
         }
         else
-        {
-            console.log("HEYE")
             return
-        }
     }, [currentArray])
 
     useEffect(() => {
-        console.log("WTF")
         if (stopped === false)
         {
             if (!isSorted(array_to_sort))
@@ -268,7 +253,6 @@ export const MainArea = () => {
     },[stopped])
 
     useEffect(() => {
-        console.log("WTF1")
         if (refresh)
             updateMapBars(count, "refresh")
     },[refresh])
